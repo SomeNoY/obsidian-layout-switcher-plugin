@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { Plugin, Editor } from "obsidian";
 import { PluginSettings, DEFAULT_SETTINGS, TestSettingTab } from "settings";
-import { EN_TO_RU } from "layouts";
+import { LAYOUTS } from "layouts";
 
 export default class SettingsPlugin extends Plugin {
 	settings: PluginSettings;
@@ -19,10 +19,29 @@ export default class SettingsPlugin extends Plugin {
 		await this.saveData(this.settings);
 	}
 
-	private convertLayout(text: string, map: Record<string, string>): string {
+	private convertLayout(
+		text: string,
+		fromLang: string,
+		toLang: string,
+	): string {
+		const fromMap = LAYOUTS[fromLang] ?? {};
+		const toMap = LAYOUTS[toLang] ?? {};
+
+		const toEn = Object.fromEntries(
+			Object.entries(fromMap).map(([en, ch]) => [ch, en]),
+		);
+
 		return text
 			.split("")
-			.map((ch) => map[ch] ?? ch)
+			.map((ch) => {
+				const lower = ch.toLowerCase();
+				const isUpper = ch !== lower;
+
+				const enKey = toEn[lower] ?? lower;
+				const converted = toMap[lower] ?? enKey;
+
+				return isUpper ? converted.toUpperCase() : converted;
+			})
 			.join("");
 	}
 
@@ -31,15 +50,6 @@ export default class SettingsPlugin extends Plugin {
 
 		this.addSettingTab(new TestSettingTab(this.app, this));
 
-		// this.addCommand({
-		// 	id: "paste-text",
-		// 	name: "Paste text",
-		// 	editorCallback: (editor: Editor) => {
-		// 		const cursor = editor.getCursor();
-		// 		editor.replaceRange(this.settings.pasteSetting, cursor);
-		// 	},
-		// });
-
 		this.addCommand({
 			id: "convert-en-to-ru",
 			name: "Convert selection: EN → RU",
@@ -47,7 +57,7 @@ export default class SettingsPlugin extends Plugin {
 				const selection = editor.getSelection();
 
 				editor.replaceSelection(
-					this.convertLayout(selection, EN_TO_RU),
+					this.convertLayout(selection, "en", "ru"),
 				);
 			},
 		});

@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
-	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"name": "layout-switcher",
+	"version": "0.1.1",
+	"description": "Changes keyboard layout",
 	"main": "main.js",
 	"type": "module",
 	"scripts": {
