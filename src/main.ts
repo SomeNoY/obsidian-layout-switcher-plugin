@@ -48,16 +48,39 @@ export default class SettingsPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
+		const firstLanguage = this.settings.firstLanguage;
+		const secondLanguage = this.settings.secondLanguage;
+
 		this.addSettingTab(new TestSettingTab(this.app, this));
 
 		this.addCommand({
-			id: "convert-en-to-ru",
-			name: "Convert selection: EN → RU",
+			id: "convert-1-to-2",
+			name: `Convert selection: ${firstLanguage.toUpperCase()} → ${secondLanguage.toUpperCase()}`,
 			editorCallback: (editor: Editor) => {
 				const selection = editor.getSelection();
 
 				editor.replaceSelection(
-					this.convertLayout(selection, "en", "ru"),
+					this.convertLayout(
+						selection,
+						firstLanguage,
+						secondLanguage,
+					),
+				);
+			},
+		});
+
+		this.addCommand({
+			id: "convert-2-to-1",
+			name: `Convert selection: ${secondLanguage.toUpperCase()} → ${firstLanguage.toUpperCase()}`,
+			editorCallback: (editor: Editor) => {
+				const selection = editor.getSelection();
+
+				editor.replaceSelection(
+					this.convertLayout(
+						selection,
+						secondLanguage,
+						firstLanguage,
+					),
 				);
 			},
 		});
