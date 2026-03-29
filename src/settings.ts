@@ -26,7 +26,7 @@ export class TestSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		new Setting(containerEl).setName("Langauges").setHeading();
+		new Setting(containerEl).setName("Languages").setHeading();
 
 		new Setting(containerEl)
 			.setName("Language #1")

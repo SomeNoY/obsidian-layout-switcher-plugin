@@ -1,4 +1,4 @@
-# Layout swithcer for Obsidian
+# Layout Swithcer for Obsidian
 
 This plugin for [Obsidian](https://obsidian.md) can switch keyboard layout in editor.
 
@@ -8,9 +8,9 @@ This plugin for [Obsidian](https://obsidian.md) can switch keyboard layout in ed
 
 - Changes the text layout from X to Y
 - Changes the text layout by selection or entire file
-- Commands can be binded to keyboard shortcuts in the Obsidian Settings
+- Commands can be bound to keyboard shortcuts in the Obsidian Settings
 
-### Suported Languages
+### Supported Languages
 
 - 🇬🇧 English
 - 🇷🇺 Russian
@@ -19,7 +19,7 @@ This plugin for [Obsidian](https://obsidian.md) can switch keyboard layout in ed
 
 ![settings](https://raw.githubusercontent.com/SomeNoY/obsidian-layout-switcher-plugin/master/assets/settings.png)
 
-- Choose your 2 main langauges. The layout will change between them.
+- Choose your 2 main languages. The layout will change between them.
 - Change the layout of the entire text. If no text is selected, the layout will be changed for the entire file. Can be toggled.
 
 ## Usage
