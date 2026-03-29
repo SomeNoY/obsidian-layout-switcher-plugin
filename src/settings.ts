@@ -4,11 +4,13 @@ import SettingsPlugin from "./main";
 export interface PluginSettings {
 	firstLanguage: string;
 	secondLanguage: string;
+	allowText: boolean;
 }
 
 export const DEFAULT_SETTINGS: PluginSettings = {
 	firstLanguage: "en",
 	secondLanguage: "ru",
+	allowText: false,
 };
 
 export class TestSettingTab extends PluginSettingTab {
@@ -23,6 +25,8 @@ export class TestSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 
 		containerEl.empty();
+
+		new Setting(containerEl).setName("Langauges").setHeading();
 
 		new Setting(containerEl)
 			.setName("Language #1")
@@ -47,6 +51,20 @@ export class TestSettingTab extends PluginSettingTab {
 					.onChange(async (value) => {
 						this.plugin.settings.secondLanguage = value;
 						await this.plugin.saveSettings();
+					}),
+			);
+
+		new Setting(containerEl).setName("Additional").setHeading();
+
+		new Setting(containerEl)
+			.setName("Change the layout of the entire text").setDesc("If no text is selected, the layout will be changed for the entire file.")
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.allowText)
+					.onChange(async (value) => {
+						this.plugin.settings.allowText = value;
+						await this.plugin.saveSettings();
+						this.display();
 					}),
 			);
 	}

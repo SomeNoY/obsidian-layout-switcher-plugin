@@ -1,6 +1,5 @@
-/* eslint-disable obsidianmd/ui/sentence-case */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { Plugin, Editor } from "obsidian";
+import { Plugin, Editor, Notice } from "obsidian";
 import { PluginSettings, DEFAULT_SETTINGS, TestSettingTab } from "settings";
 import { LAYOUTS } from "layouts";
 
@@ -45,42 +44,54 @@ export default class SettingsPlugin extends Plugin {
 			.join("");
 	}
 
+	private replaceText(
+		text: string,
+		fromLang: string,
+		toLang: string,
+		editor: Editor,
+	) {
+		if (text) {
+			editor.replaceSelection(this.convertLayout(text, fromLang, toLang));
+		} else if (this.settings.allowText) {
+			editor.setValue(
+				this.convertLayout(editor.getValue(), fromLang, toLang),
+			);
+		} else if (!this.settings.allowText) {
+			new Notice("Select the text to change the layout");
+		}
+	}
+
 	async onload() {
 		await this.loadSettings();
-
-		const firstLanguage = this.settings.firstLanguage;
-		const secondLanguage = this.settings.secondLanguage;
 
 		this.addSettingTab(new TestSettingTab(this.app, this));
 
 		this.addCommand({
 			id: "convert-1-to-2",
-			name: `Convert selection: ${firstLanguage.toUpperCase()} → ${secondLanguage.toUpperCase()}`,
-			editorCallback: (editor: Editor) => {
+			name: `Convert selection: ${this.settings.firstLanguage.toUpperCase()} → ${this.settings.secondLanguage.toUpperCase()}`,
+			editorCallback: async (editor: Editor) => {
 				const selection = editor.getSelection();
 
-				editor.replaceSelection(
-					this.convertLayout(
-						selection,
-						firstLanguage,
-						secondLanguage,
-					),
+				this.replaceText(
+					selection,
+					this.settings.firstLanguage,
+					this.settings.secondLanguage,
+					editor,
 				);
 			},
 		});
 
 		this.addCommand({
 			id: "convert-2-to-1",
-			name: `Convert selection: ${secondLanguage.toUpperCase()} → ${firstLanguage.toUpperCase()}`,
+			name: `Convert selection: ${this.settings.secondLanguage.toUpperCase()} → ${this.settings.firstLanguage.toUpperCase()}`,
 			editorCallback: (editor: Editor) => {
 				const selection = editor.getSelection();
 
-				editor.replaceSelection(
-					this.convertLayout(
-						selection,
-						secondLanguage,
-						firstLanguage,
-					),
+				this.replaceText(
+					selection,
+					this.settings.secondLanguage,
+					this.settings.firstLanguage,
+					editor,
 				);
 			},
 		});

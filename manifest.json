@@ -1,9 +1,10 @@
 {
 	"id": "layout-switcher",
 	"name": "Layout switcher",
-	"version": "0.2.0",
+	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Changes keyboard layout",
+	"description": "This plugin can switch keyboard layout in editor.",
 	"author": "SomeNoY",
+	"authorUrl": "https://github.com/SomeNoY",
 	"isDesktopOnly": false
 }
