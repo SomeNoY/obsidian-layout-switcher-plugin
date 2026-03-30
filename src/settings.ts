@@ -2,18 +2,22 @@ import { App, PluginSettingTab, Setting } from "obsidian";
 import SettingsPlugin from "./main";
 
 export interface PluginSettings {
-	firstLanguage: string;
-	secondLanguage: string;
+	language: string;
 	allowText: boolean;
 }
 
 export const DEFAULT_SETTINGS: PluginSettings = {
-	firstLanguage: "en",
-	secondLanguage: "ru",
+	language: "",
 	allowText: false,
 };
 
-export class TestSettingTab extends PluginSettingTab {
+const languageDropdown: Record<string, string> = {
+	ru: "Русский",
+	ua: "Український",
+	sr: "Српски (ћирилица)",
+};
+
+export class LayoutPluginSettingTab extends PluginSettingTab {
 	plugin: SettingsPlugin;
 
 	constructor(app: App, plugin: SettingsPlugin) {
@@ -26,38 +30,21 @@ export class TestSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		new Setting(containerEl).setName("Languages").setHeading();
+		new Setting(containerEl).setName("Language").addDropdown((dropdown) =>
+			dropdown
+				.addOptions(languageDropdown)
+				.setValue(this.plugin.settings.language)
+				.onChange(async (value) => {
+					this.plugin.settings.language = value;
+					await this.plugin.saveSettings();
+				}),
+		);
 
 		new Setting(containerEl)
-			.setName("Language #1")
-			.addDropdown((dropdown) =>
-				dropdown
-					.addOption("en", "English")
-					.addOption("ru", "Русский")
-					.setValue(this.plugin.settings.firstLanguage)
-					.onChange(async (value) => {
-						this.plugin.settings.firstLanguage = value;
-						await this.plugin.saveSettings();
-					}),
-			);
-
-		new Setting(containerEl)
-			.setName("Language #2")
-			.addDropdown((dropdown) =>
-				dropdown
-					.addOption("en", "English")
-					.addOption("ru", "Русский")
-					.setValue(this.plugin.settings.secondLanguage)
-					.onChange(async (value) => {
-						this.plugin.settings.secondLanguage = value;
-						await this.plugin.saveSettings();
-					}),
-			);
-
-		new Setting(containerEl).setName("Additional").setHeading();
-
-		new Setting(containerEl)
-			.setName("Change the layout of the entire text").setDesc("If no text is selected, the layout will be changed for the entire file.")
+			.setName("Change the layout of the entire text")
+			.setDesc(
+				"If no text is selected, the layout will be changed for the entire file.",
+			)
 			.addToggle((toggle) =>
 				toggle
 					.setValue(this.plugin.settings.allowText)

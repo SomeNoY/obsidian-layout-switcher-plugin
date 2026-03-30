@@ -1,6 +1,9 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Plugin, Editor, Notice } from "obsidian";
-import { PluginSettings, DEFAULT_SETTINGS, TestSettingTab } from "settings";
+import {
+	PluginSettings,
+	DEFAULT_SETTINGS,
+	LayoutPluginSettingTab,
+} from "settings";
 import { LAYOUTS } from "layouts";
 
 export default class SettingsPlugin extends Plugin {
@@ -37,7 +40,7 @@ export default class SettingsPlugin extends Plugin {
 				const isUpper = ch !== lower;
 
 				const enKey = toEn[lower] ?? lower;
-				const converted = toMap[lower] ?? enKey;
+				const converted = toMap[enKey] ?? enKey;
 
 				return isUpper ? converted.toUpperCase() : converted;
 			})
@@ -64,38 +67,38 @@ export default class SettingsPlugin extends Plugin {
 	async onload() {
 		await this.loadSettings();
 
-		this.addSettingTab(new TestSettingTab(this.app, this));
+		this.addSettingTab(new LayoutPluginSettingTab(this.app, this));
 
 		this.addCommand({
-			id: "convert-1-to-2",
-			name: `Convert selection: ${this.settings.firstLanguage.toUpperCase()} → ${this.settings.secondLanguage.toUpperCase()}`,
+			id: "convert-en-to-lang",
+			name: `Convert selection: EN → ${this.settings.language.toUpperCase()}`,
 			editorCallback: async (editor: Editor) => {
 				const selection = editor.getSelection();
 
 				this.replaceText(
 					selection,
-					this.settings.firstLanguage,
-					this.settings.secondLanguage,
+					"en",
+					this.settings.language,
 					editor,
 				);
 			},
 		});
 
 		this.addCommand({
-			id: "convert-2-to-1",
-			name: `Convert selection: ${this.settings.secondLanguage.toUpperCase()} → ${this.settings.firstLanguage.toUpperCase()}`,
+			id: "convert-lang-to-en",
+			name: `Convert selection: ${this.settings.language.toUpperCase()} → EN`,
 			editorCallback: (editor: Editor) => {
 				const selection = editor.getSelection();
 
 				this.replaceText(
 					selection,
-					this.settings.secondLanguage,
-					this.settings.firstLanguage,
+					this.settings.language,
+					"en",
 					editor,
 				);
 			},
 		});
 	}
 
-	async onunload() {}
+	onunload() {}
 }

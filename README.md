@@ -14,6 +14,8 @@ This plugin for [Obsidian](https://obsidian.md) can switch keyboard layout in ed
 
 - 🇬🇧 English
 - 🇷🇺 Russian
+- 🇺🇦 Ukrainian
+- 🇷🇸 Serbian (Cyrillic)
 
 ## Settings
 
@@ -26,8 +28,10 @@ This plugin for [Obsidian](https://obsidian.md) can switch keyboard layout in ed
 
 1. To change the layout you can:
 	- Select the text
+  
 	**OR**
-	- Don't select the text if `Change the layout of the entire text`
+	
+	- Don't select the text if `Change the layout of the entire text` enabled
 2. Open Command Palette and find the command **OR** Use binded keyboard shortcut
 3. Your text layout will switch from the current to your desired
 
